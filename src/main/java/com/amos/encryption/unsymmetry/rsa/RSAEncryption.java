@@ -23,12 +23,12 @@ public class RSAEncryption {
     /**
      * RSA最大加密明文大小
      */
-    private static final int MAX_ENCRYPT_BLOCK = 117;
+    private static final int MAX_ENCRYPT_BLOCK = 53;
 
     /**
      * RSA最大解密密文大小
      */
-    private static final int MAX_DECRYPT_BLOCK = 128;
+    private static final int MAX_DECRYPT_BLOCK = 64;
 
     /**
      * 加密
@@ -116,6 +116,7 @@ public class RSAEncryption {
      */
     private static KeyPair getKeyPair() throws Exception {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        //最大可以设置1024，对应MAX_ENCRYPT_BLOCK为117,128
         generator.initialize(512);
         return generator.generateKeyPair();
     }
@@ -183,7 +184,9 @@ public class RSAEncryption {
             System.out.println("私钥:" + privateKey);
             System.out.println("公钥:" + publicKey);
             // RSA加密
-            String data = "待加密的文字内容";
+            String data = "PS:RSA加密对明文的长度有所限制，规定需加密的明文最大长度=密钥长度-11（单位是字节，即byte），所以在加密和解密的过程中需要分块进行。而密钥默认是1024位，即1024位/8位-11=128-11=117字节。所以默认加密前的明文最大长度117字节，解密密文最大长度为128字。那么为啥两者相差11字节呢？是因为RSA加密使用到了填充模式（padding），即内容不足117字节时会自动填满，用到填充模式自然会占用一定的字节，而且这部分字节也是参与加密的。\n" +
+                    "\n" +
+                    "　　密钥长度的设置就是上面例子的第32行。可自行调整，当然非对称加密随着密钥变长，安全性上升的同时性能也会有所下降。";
             String encryptData = encrypt(data, publicKey);
             System.out.println("加密后内容:" + encryptData);
             // RSA解密

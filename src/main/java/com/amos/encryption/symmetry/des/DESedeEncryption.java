@@ -5,7 +5,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
-import java.io.ByteArrayOutputStream;
+import javax.crypto.spec.DESedeKeySpec;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -13,21 +13,21 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 /**
- * @ClassName : DESEncryption
- * @Description :des加密解密
+ * @ClassName : DESedeEncryption
+ * @Description :DESede加密解密,秘钥长度更长，优于DES
  * @Author : mlb
  * @Date: 2020-07-21 15:38
  */
-public class DESEncryption {
+public class DESedeEncryption {
 
     /**
      * 密钥算法
      */
-    private static final String ALGORITHM = "DES";
+    private static final String ALGORITHM = "DESede";
     /**
      * 加密/解密算法-工作模式-填充模式
      */
-    private static final String CIPHER_ALGORITHM = "DES/ECB/PKCS5Padding";
+    private static final String CIPHER_ALGORITHM = "DESede/ECB/PKCS5Padding";
 
 
     /**
@@ -95,7 +95,7 @@ public class DESEncryption {
      */
     private static SecretKey getSecretKey(String key) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] b = Base64.decodeBase64(key.getBytes());
-        DESKeySpec dks = new DESKeySpec(b);
+        DESedeKeySpec dks = new DESedeKeySpec (b);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
         return keyFactory.generateSecret(dks);
     }
@@ -107,7 +107,7 @@ public class DESEncryption {
      */
     private static String getKey() throws Exception {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
-        generator.init(56);
+        generator.init(168);
         SecretKey key = generator.generateKey();
         return Base64.encodeBase64String(key.getEncoded());
         // SecretKey byte[]相互转换
