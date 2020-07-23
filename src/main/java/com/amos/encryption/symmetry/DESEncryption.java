@@ -1,4 +1,4 @@
-package com.amos.encryption.symmetry.des;
+package com.amos.encryption.symmetry;
 
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -44,7 +44,6 @@ public class DESEncryption {
         //获取秘钥
         SecretKey secretKey = getSecretKey(key);
         //加密
-        //
         Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey,random);
         byte[] encryptedData =  cipher.doFinal(data.getBytes());
@@ -107,6 +106,7 @@ public class DESEncryption {
      */
     private static String getKey() throws Exception {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
+        // 密钥长度为56位
         generator.init(56);
         SecretKey key = generator.generateKey();
         return Base64.encodeBase64String(key.getEncoded());

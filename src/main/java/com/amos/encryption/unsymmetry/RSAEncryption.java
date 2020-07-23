@@ -1,4 +1,4 @@
-package com.amos.encryption.unsymmetry.rsa;
+package com.amos.encryption.unsymmetry;
 
 
 import org.apache.tomcat.util.codec.binary.Base64;
