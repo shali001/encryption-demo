@@ -83,7 +83,9 @@ public class AESEncryption {
     private static SecretKeySpec getSecretKey(String key) throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
         KeyGenerator generator = KeyGenerator.getInstance(ALGORITHM);
         // AES 要求密钥长度为128位、192位或256位
-        generator.init(256,new SecureRandom(key.getBytes()));
+        SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+        random.setSeed(key.getBytes());
+        generator.init(256, random);
         SecretKey secretKey = generator.generateKey();
         return new SecretKeySpec(secretKey.getEncoded(), ALGORITHM);
     }
